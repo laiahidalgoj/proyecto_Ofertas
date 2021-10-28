@@ -1,0 +1,10 @@
+equipo1/ofertasLaborales/controller/OfertaController.class
+equipo1/ofertasLaborales/TipoContrato.class
+equipo1/ofertasLaborales/config/SwaggerConfig.class
+equipo1/ofertasLaborales/repositories/OfertaRepository.class
+equipo1/ofertasLaborales/OfertasLaboralesApplication.class
+equipo1/ofertasLaborales/entities/Oferta.class
+equipo1/ofertasLaborales/controller/TecnologiaController.class
+equipo1/ofertasLaborales/repositories/TecnologiaRepository.class
+equipo1/ofertasLaborales/entities/Tecnologia.class
+equipo1/ofertasLaborales/Modalidad.class
