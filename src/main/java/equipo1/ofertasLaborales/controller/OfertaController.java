@@ -97,12 +97,9 @@ public class OfertaController {
 
     /**
      * Eliminar una oferta de la bbdd.
-     * 
      * @param id
      * @return
      */
-    //TODO
-    @ApiIgnore
     @DeleteMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> delete(@PathVariable Long id) {
 
@@ -110,9 +107,7 @@ public class OfertaController {
             log.warn("Intentando eliminar una oferta inexistente");
             return ResponseEntity.notFound().build();
         }
-
         ofertaRepository.deleteById(id);
-
         return ResponseEntity.noContent().build();
     }
 
@@ -120,7 +115,6 @@ public class OfertaController {
      * Eliminar todas las ofertas de la bbdd.
      * @return
      */
-    @ApiIgnore
     @DeleteMapping("/api/ofertas")
     public ResponseEntity<Oferta> deleteAll() {
         log.info("Petición REST para eliminar todas las ofertas");

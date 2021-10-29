@@ -33,7 +33,6 @@ class TecnologiaControllerTest {
     }
 
 
-
     @Test
     void findAll() {
         ResponseEntity<Tecnologia[]> response = testRestTemplate.getForEntity("/api/tecnologias", Tecnologia[].class);
@@ -57,41 +56,36 @@ class TecnologiaControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        String json = """
+        String tecnologia = """
                  {
-                         "tecnologias": [
-                             {
-                     
-                                 "nombre": "C#"
-                             }
-                         ],
-                         "empresa": "IT",
-                         "descripcion": "Comunicaciones",
-                         "numeroVacantes": 4,
-                         "localidad": "Barcelona",
-                         "salarioMinimo": 20000,
-                         "salarioMaximo": 24000,
-                         "modalidad": "Remoto",
-                         "anyosExperiencia": 2,
-                         "titulacion": "Ingeniero",
-                         "categoria": 4,
-                         "tipoContrato": "Indefinido",
-                         "fechaPublicacion": "2021-12-01T00:00:00.000+00:00",
-                         "estadoProceso": true
-                     }
+                        "nombre": "Html"
+                    }
                 """;
 
-        HttpEntity<String> request = new HttpEntity<>(json,headers);
+        HttpEntity<String> request = new HttpEntity<>(tecnologia, headers);
         ResponseEntity<Tecnologia> response = testRestTemplate.exchange("/api/tecnologias", HttpMethod.POST, request, Tecnologia.class);
 
         Tecnologia result = response.getBody();
-
         assertEquals(1L, result.getId());
     }
 
     @Test
     void update() {
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
+        ResponseEntity<Tecnologia> response = testRestTemplate.getForEntity("/api/tecnologias/2", Tecnologia.class);
+        String oferta = """
+                 {
+                      "nombre": "Spring"
+                    },
+                """;
+
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        ResponseEntity<Tecnologia> response2 =testRestTemplate.exchange("/api/tecnologias",HttpMethod.PUT,request,Tecnologia.class);
+        //assertEquals(HttpStatus.OK, response2.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
     }
 
     @Test
@@ -102,12 +96,11 @@ class TecnologiaControllerTest {
         //creamos el httpEntity para pasarlo al testresttempalte
         HttpEntity<String> httpEntity=new HttpEntity<String>(headers);
 
-        ResponseEntity<Oferta> respuesta = testRestTemplate.exchange("/api/ofertas",
+        ResponseEntity<Oferta> respuesta = testRestTemplate.exchange("/api/tecnologias/1",
                 HttpMethod.DELETE,httpEntity, Oferta.class);
 
-        //assertEquals(HttpStatus.OK,respuesta.getStatusCode());
+        //assertEquals(HttpStatus.NOT_FOUND,respuesta.getStatusCode());
         assertEquals(HttpStatus.NO_CONTENT,respuesta.getStatusCode());
-
     }
 
     @Test
@@ -118,12 +111,10 @@ class TecnologiaControllerTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 
-        ResponseEntity<String> respuesta= testRestTemplate.exchange("/api/ofertas",
+        ResponseEntity<String> respuesta= testRestTemplate.exchange("/api/tecnologias",
                 HttpMethod.DELETE,httpEntity,String.class);
 
         //assertEquals(HttpStatus.OK, respuesta.getStatusCode());
         assertEquals(HttpStatus.NO_CONTENT, respuesta.getStatusCode());
     }
-
-
     }
