@@ -25,7 +25,7 @@ import java.util.List;
             },
             inverseJoinColumns= {
             @JoinColumn(name = "IdTecnologia", referencedColumnName = "id") })
-    @JsonManagedReference
+    //@JsonManagedReference
     private List<Tecnologia> tecnologias = new ArrayList<>();
 
     // Resto de atributos

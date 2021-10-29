@@ -1,5 +1,6 @@
 package equipo1.ofertasLaborales.controller;
 
+import equipo1.ofertasLaborales.entities.Oferta;
 import equipo1.ofertasLaborales.entities.Tecnologia;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TecnologiaController {
+class OfertaControllerTest {
 
     private TestRestTemplate testRestTemplate;
 
@@ -35,9 +36,39 @@ public class TecnologiaController {
 
     @Test
     void findAll() {
-        ResponseEntity<Tecnologia[]> response = testRestTemplate.getForEntity("/api/tecnologias", Tecnologia[].class);
+        ResponseEntity<Oferta[]> response = testRestTemplate.getForEntity("/api/ofertas",Oferta[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(200, response.getStatusCodeValue());
+
+        List<Oferta> ofertas = Arrays.asList(response.getBody());
+        System.out.println(ofertas.size());
+    }
+
+    @Test
+    void findById() {
+        ResponseEntity<Oferta[]> response = testRestTemplate.getForEntity("/api/ofertas", Oferta[].class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(200, response.getStatusCodeValue());
+
+        List<Oferta> ofertas = Arrays.asList(response.getBody());
+        System.out.println(ofertas.size());
+    }
+
+    @Test
+    void create() {
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void delete() {
+    }
+
+    @Test
+    void deleteAll() {
     }
 }
