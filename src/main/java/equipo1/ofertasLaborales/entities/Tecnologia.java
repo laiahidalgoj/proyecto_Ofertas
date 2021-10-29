@@ -1,8 +1,10 @@
 package equipo1.ofertasLaborales.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidad que gestiona la tabla tecnologías de la base de datos
@@ -15,12 +17,18 @@ public class Tecnologia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToMany(mappedBy = "tecnologias", fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Oferta> ofertas= new ArrayList<>();
+
     // Resto de atributos
     private String nombre;
 
-
     // Constructores
-    public Tecnologia() {
+    public Tecnologia() {}
+
+    public Tecnologia(String nombre) {
+        this.nombre = nombre;
     }
 
     public Tecnologia(Long id, String nombre) {
@@ -29,8 +37,6 @@ public class Tecnologia {
     }
 
     // Setters y Getters
-
-
     public Long getId() {
         return id;
     }
@@ -47,13 +53,19 @@ public class Tecnologia {
         this.nombre = nombre;
     }
 
-    // ToString
+    public List<Oferta> getOfertas() {
+        return ofertas;
+    }
 
+    public void setOfertas(List<Oferta> ofertas) {
+        this.ofertas = ofertas;
+    }
 
     @Override
     public String toString() {
         return "Tecnologia{" +
                 "id=" + id +
+//                ", ofertas=" + ofertas +
                 ", nombre='" + nombre + '\'' +
                 '}';
     }

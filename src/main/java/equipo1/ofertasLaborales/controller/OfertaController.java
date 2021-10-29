@@ -1,13 +1,16 @@
 package equipo1.ofertasLaborales.controller;
 
 import equipo1.ofertasLaborales.entities.Oferta;
+import equipo1.ofertasLaborales.entities.Tecnologia;
 import equipo1.ofertasLaborales.repositories.OfertaRepository;
+import equipo1.ofertasLaborales.repositories.TecnologiaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +20,7 @@ public class OfertaController {
     private final Logger log = LoggerFactory.getLogger(OfertaController.class);
 
     private OfertaRepository ofertaRepository;
+    private TecnologiaRepository tecnologiaRepository;
 
     public OfertaController(OfertaRepository ofertaRepository) {
         this.ofertaRepository = ofertaRepository;
@@ -52,6 +56,7 @@ public class OfertaController {
      * @param oferta
      * @return
      */
+    //TODO
     @ApiIgnore
     @PostMapping("/api/ofertas")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
@@ -59,6 +64,9 @@ public class OfertaController {
             log.warn("Intentando crear una oferta con id");
             return ResponseEntity.badRequest().build();
         }
+
+        List<Tecnologia> tecnologias = oferta.getTecnologias();
+        System.out.println(tecnologias);
 
         Oferta result = ofertaRepository.save(oferta);
         return ResponseEntity.ok(result);
@@ -70,6 +78,7 @@ public class OfertaController {
      * @param oferta
      * @return
      */
+    //TODO
     @ApiIgnore
     @PutMapping("/api/ofertas")
     public ResponseEntity<Oferta> update(@RequestBody Oferta oferta) {
@@ -92,6 +101,7 @@ public class OfertaController {
      * @param id
      * @return
      */
+    //TODO
     @ApiIgnore
     @DeleteMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> delete(@PathVariable Long id) {

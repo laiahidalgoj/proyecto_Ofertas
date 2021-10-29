@@ -1,12 +1,11 @@
 package equipo1.ofertasLaborales.entities;
 
-import equipo1.ofertasLaborales.Modalidad;
-import equipo1.ofertasLaborales.TipoContrato;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
-
+import java.util.List;
 
 /**
  * Entidad que gestiona la tabla ofertas de la base de datos
@@ -19,14 +18,15 @@ import java.util.Set;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name="OfertaTecnologia",
             joinColumns={
             @JoinColumn(name="IdOferta", referencedColumnName = "id")
             },
             inverseJoinColumns= {
             @JoinColumn(name = "IdTecnologia", referencedColumnName = "id") })
-    private Set<Tecnologia> tecnologias;
+    @JsonManagedReference
+    private List<Tecnologia> tecnologias = new ArrayList<>();
 
     // Resto de atributos
     private String empresa;
@@ -35,27 +35,24 @@ import java.util.Set;
     private String localidad;
     private Integer salarioMinimo;
     private Integer salarioMaximo;
-    @Enumerated(EnumType.ORDINAL)
-    private Modalidad modalidad;
+    private String modalidad;
     private Integer anyosExperiencia;
     private String titulacion;
-    private Integer categoria;
-    @Enumerated(EnumType.ORDINAL)
-    private TipoContrato tipoContrato;
+    private String categoria;
+    private String tipoContrato;
     private Date fechaPublicacion;
     private Boolean estadoProceso;
-
+    private String urlImagen;
 
     // Constructores
-    public Oferta() {
-    }
+    public Oferta() {}
 
-    public Oferta(Long id, Set<Tecnologia> tecnologias, String empresa, String descripcion, Integer numeroVacantes,
-                  String localidad, Integer salarioMinimo, Integer salarioMaximo, Modalidad modalidad,
-                  Integer anyosExperiencia, String titulacion, Integer categoria, TipoContrato tipoContrato,
-                  Date fechaPublicacion, Boolean estadoProceso) {
+    public Oferta(Long id, String empresa, String descripcion, Integer numeroVacantes,
+                  String localidad, Integer salarioMinimo, Integer salarioMaximo, String modalidad,
+                  Integer anyosExperiencia, String titulacion, String categoria, String tipoContrato,
+                  Date fechaPublicacion, Boolean estadoProceso, String urlImagen) {
         this.id = id;
-        this.tecnologias = tecnologias;
+//        this.tecnologias = tecnologias;
         this.empresa = empresa;
         this.descripcion = descripcion;
         this.numeroVacantes = numeroVacantes;
@@ -69,11 +66,10 @@ import java.util.Set;
         this.tipoContrato = tipoContrato;
         this.fechaPublicacion = fechaPublicacion;
         this.estadoProceso = estadoProceso;
+        this.urlImagen = urlImagen;
     }
 
     // Setters y Getters
-
-
     public Long getId() {
         return id;
     }
@@ -82,11 +78,11 @@ import java.util.Set;
         this.id = id;
     }
 
-    public Set<Tecnologia> getTecnologias() {
+    public List<Tecnologia> getTecnologias() {
         return tecnologias;
     }
 
-    public void setTecnologias(Set<Tecnologia> tecnologias) {
+    public void setTecnologias(List<Tecnologia> tecnologias) {
         this.tecnologias = tecnologias;
     }
 
@@ -138,11 +134,11 @@ import java.util.Set;
         this.salarioMaximo = salarioMaximo;
     }
 
-    public Modalidad getModalidad() {
+    public String getModalidad() {
         return modalidad;
     }
 
-    public void setModalidad(Modalidad modalidad) {
+    public void setModalidad(String modalidad) {
         this.modalidad = modalidad;
     }
 
@@ -162,19 +158,27 @@ import java.util.Set;
         this.titulacion = titulacion;
     }
 
-    public Integer getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Integer categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
-    public TipoContrato getTipoContrato() {
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
+    public String getTipoContrato() {
         return tipoContrato;
     }
 
-    public void setTipoContrato(TipoContrato tipoContrato) {
+    public void setTipoContrato(String tipoContrato) {
         this.tipoContrato = tipoContrato;
     }
 
@@ -194,9 +198,6 @@ import java.util.Set;
         this.estadoProceso = estadoProceso;
     }
 
-    //Tostring
-
-
     @Override
     public String toString() {
         return "Oferta{" +
@@ -208,13 +209,14 @@ import java.util.Set;
                 ", localidad='" + localidad + '\'' +
                 ", salarioMinimo=" + salarioMinimo +
                 ", salarioMaximo=" + salarioMaximo +
-                ", modalidad=" + modalidad +
+                ", modalidad='" + modalidad + '\'' +
                 ", anyosExperiencia=" + anyosExperiencia +
                 ", titulacion='" + titulacion + '\'' +
                 ", categoria=" + categoria +
-                ", tipoContrato=" + tipoContrato +
+                ", tipoContrato='" + tipoContrato + '\'' +
                 ", fechaPublicacion=" + fechaPublicacion +
                 ", estadoProceso=" + estadoProceso +
+                ", urlImagen='" + urlImagen + '\'' +
                 '}';
     }
 }
