@@ -146,7 +146,7 @@ class OfertaControllerTest {
 
     @Test
     void deleteAll() {
-        HttpHeaders headers=new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
