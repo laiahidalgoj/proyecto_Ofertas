@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +57,24 @@ class OfertaControllerTest {
 
     @Test
     void create() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        String json = """
+                 {
+                     "tecnologia": "html"
+                 }
+                """;
+
+        HttpEntity<String> request = new HttpEntity<>(json,headers);
+        ResponseEntity<Tecnologia> response = testRestTemplate.exchange("/api/tecnologias", HttpMethod.POST, request, Tecnologia.class);
+
+        Tecnologia result = response.getBody();
+
+        assertEquals(1L, result.getId());
     }
+
 
     @Test
     void update() {

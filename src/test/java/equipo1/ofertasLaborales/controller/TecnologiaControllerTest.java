@@ -52,7 +52,40 @@ class TecnologiaControllerTest {
 
     @Test
     void create() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
+        String json = """
+                 {
+                         "tecnologias": [
+                             {
+                     
+                                 "nombre": "C#"
+                             }
+                         ],
+                         "empresa": "IT",
+                         "descripcion": "Comunicaciones",
+                         "numeroVacantes": 4,
+                         "localidad": "Barcelona",
+                         "salarioMinimo": 20000,
+                         "salarioMaximo": 24000,
+                         "modalidad": "Remoto",
+                         "anyosExperiencia": 2,
+                         "titulacion": "Ingeniero",
+                         "categoria": 4,
+                         "tipoContrato": "Indefinido",
+                         "fechaPublicacion": "2021-12-01T00:00:00.000+00:00",
+                         "estadoProceso": true
+                     }
+                """;
+
+        HttpEntity<String> request = new HttpEntity<>(json,headers);
+        ResponseEntity<Tecnologia> response = testRestTemplate.exchange("/api/tecnologias", HttpMethod.POST, request, Tecnologia.class);
+
+        Tecnologia result = response.getBody();
+
+        assertEquals(1L, result.getId());
     }
 
     @Test
