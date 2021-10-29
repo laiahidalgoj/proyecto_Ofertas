@@ -15,7 +15,8 @@ import java.util.*;
 public class OfertasLaboralesApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(OfertasLaboralesApplication.class, args);
+		ApplicationContext context = SpringApplication.run(OfertasLaboralesApplication.class,
+				args);
 		OfertaRepository ofertaRepository = context.getBean(OfertaRepository.class);
 		TecnologiaRepository tecnologiaRepository = context.getBean(TecnologiaRepository.class);
 
