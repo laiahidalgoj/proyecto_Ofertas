@@ -56,7 +56,7 @@ public class OfertaController {
      * @param oferta
      * @return
      */
-    //TODO
+
     @ApiIgnore
     @PostMapping("/api/ofertas")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
