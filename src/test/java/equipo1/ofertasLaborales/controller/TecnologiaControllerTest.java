@@ -1,5 +1,6 @@
 package equipo1.ofertasLaborales.controller;
 
+import equipo1.ofertasLaborales.entities.Oferta;
 import equipo1.ofertasLaborales.entities.Tecnologia;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,25 +94,36 @@ class TecnologiaControllerTest {
 
     }
 
-//    @Test
-//    void delete() {
-//        HttpHeaders headers=new HttpHeaders();
-//        headers.setContentType(MediaType.TEXT_PLAIN);
-//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        //creamos el httpEntity para pasarlo al testresttempalte
-//        HttpEntity<String> httpEntity=new HttpEntity<String>(headers);
-//
-//        ResponseEntity<Tecnologia> respuesta = testRestTemplate.exchange("/api/tecnologias",
-//                HttpMethod.DELETE,httpEntity,Tecnologia.class);
-//
-//        assertEquals(HttpStatus.OK,respuesta.getStatusCode());
-//        //Si metemos un numero de serie incorrecto utilizar este assert
-//        //assertEquals(HttpStatus.BAD_REQUEST,respuesta.getStatusCode());
-//
-//    }
+    @Test
+    void delete() {
+        HttpHeaders headers=new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        //creamos el httpEntity para pasarlo al testresttempalte
+        HttpEntity<String> httpEntity=new HttpEntity<String>(headers);
+
+        ResponseEntity<Oferta> respuesta = testRestTemplate.exchange("/api/ofertas",
+                HttpMethod.DELETE,httpEntity, Oferta.class);
+
+        //assertEquals(HttpStatus.OK,respuesta.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT,respuesta.getStatusCode());
+
+    }
 
     @Test
     void deleteAll() {
+        HttpHeaders headers=new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+
+        ResponseEntity<String> respuesta= testRestTemplate.exchange("/api/ofertas",
+                HttpMethod.DELETE,httpEntity,String.class);
+
+        //assertEquals(HttpStatus.OK, respuesta.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, respuesta.getStatusCode());
+    }
+
 
     }
-}
