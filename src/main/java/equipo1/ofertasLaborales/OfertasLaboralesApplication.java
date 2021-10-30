@@ -47,12 +47,12 @@ public class OfertasLaboralesApplication {
 		Oferta oferta2 = new Oferta(null, "Desarrollador Frontend Jr.","Vodafone","Comunicaciones",
 				2,"Madrid",11000,16000,
 				"Remoto",1,
-				"CFGS","Frontend","Practicas" ,fecha2,true,"");
+				"CFGS","Frontend","Practicas" ,fecha2,false,"");
 
-		Oferta oferta3 = new Oferta(null, "Desarrollador Backend Sr.","Movistar", "Comunicaciones",
+		Oferta oferta3 = new Oferta(null, "Desarrollador Fullstack Sr.","Movistar", "Comunicaciones",
 				2, "Zaragoza", 14000, 19000,
 				"Remoto", 3,
-				"CFGS", "Backend", "Practicas", fecha3, true, "");
+				"CFGS", "Fullstack", "Practicas", fecha3, true, "");
 
 		ofertaRepository.save(oferta1);
 		ofertaRepository.save(oferta2);
@@ -60,7 +60,7 @@ public class OfertasLaboralesApplication {
 
 		List<Tecnologia> tecnologias1 = Arrays.asList(tecJava, tecSpring);
 		List<Tecnologia> tecnologias2 = Arrays.asList(tecJS, tecAngular, tecCSS);
-		List<Tecnologia> tecnologias3 = Arrays.asList(tecPython, tecDjango, tecReact);
+		List<Tecnologia> tecnologias3 = Arrays.asList(tecJS, tecCSS, tecReact, tecPython, tecDjango);
 
 		for (Tecnologia tecnologia : tecnologias1) {
 			oferta1.addTecnologia(tecnologia);

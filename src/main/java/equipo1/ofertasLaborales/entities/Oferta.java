@@ -16,8 +16,7 @@ import java.util.*;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,
-            CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name="OfertaTecnologia",
             joinColumns={
             @JoinColumn(name="IdOferta", referencedColumnName = "id")

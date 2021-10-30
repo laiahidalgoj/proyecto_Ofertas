@@ -63,9 +63,9 @@ class OfertaControllerTest {
 
         String oferta = """
                  {
+                        "nombre" : "Desarrollador Frontend Jr.",
                          "tecnologias": [
-                             {
-                     
+                             {                     
                                  "nombre": "C#"
                              }
                          ],
@@ -89,6 +89,7 @@ class OfertaControllerTest {
         ResponseEntity<Tecnologia> response = testRestTemplate.exchange("/api/ofertas", HttpMethod.POST, request, Tecnologia.class);
 
         Tecnologia result = response.getBody();
+        assert result != null;
         assertEquals(1L, result.getId());
     }
 
