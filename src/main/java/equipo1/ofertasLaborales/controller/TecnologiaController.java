@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class TecnologiaController {
@@ -57,14 +54,20 @@ public class TecnologiaController {
      * @param tecnologia
      * @return
      */
-    //TODO
-    @ApiIgnore
     @PostMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> create(@RequestBody Tecnologia tecnologia) {
-        if(tecnologia.getId() != null) {
+        if (tecnologia.getId() != null) {
             log.warn("Intentando crear una tecnologia con id");
             return ResponseEntity.badRequest().build();
         }
+        List<Tecnologia> tecnologias = tecnologiaRepository.findAll();
+        for (Tecnologia tecnologiaEnRepo : tecnologias) {
+            if (tecnologiaEnRepo.equals(tecnologia)) {
+                log.warn("Intentando crear una tecnologia ya existente");
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
 
         Tecnologia result = tecnologiaRepository.save(tecnologia);
         return ResponseEntity.ok(result);
@@ -76,26 +79,15 @@ public class TecnologiaController {
      * @param tecnologia
      * @return
      */
-    @ApiIgnore
     @PutMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> update(@RequestBody Tecnologia tecnologia) {
-        if(tecnologia.getId() == null) {
+        if (tecnologia.getId() == null) {
             log.warn("Intentando actualizar una tecnología inexistente");
             return ResponseEntity.badRequest().build();
         }
         if (!tecnologiaRepository.existsById(tecnologia.getId())) {
             log.warn("Intentando actualizar una tecnología inexistente");
             return ResponseEntity.notFound().build();
-        }
-        Optional<Tecnologia> tecnologiaOpt = tecnologiaRepository.findById(tecnologia.getId());
-        if (tecnologiaOpt.isPresent()) {
-            Tecnologia tecnologiaParaActualizar = tecnologiaOpt.get();
-            List<Oferta> ofertas = tecnologiaParaActualizar.getOfertas();
-            for (Oferta oferta : ofertas) {
-                ArrayList<Tecnologia> tecnologias = (ArrayList<Tecnologia>) oferta.getTecnologias();
-                tecnologias.get(tecnologias.indexOf(tecnologia)).setNombre(tecnologia.getNombre());
-                ofertaRepository.save(oferta);
-            }
         }
 
         Tecnologia result = tecnologiaRepository.save(tecnologia);
@@ -119,9 +111,11 @@ public class TecnologiaController {
         Optional<Tecnologia> tecnologiaOpt = tecnologiaRepository.findById(id);
         if (tecnologiaOpt.isPresent()) {
             Tecnologia tecnologia = tecnologiaOpt.get();
-            List<Oferta> ofertas = tecnologia.getOfertas();
+            System.out.println(tecnologia );
+            System.out.println(tecnologia.getOfertas());
+            Set<Oferta> ofertas = tecnologia.getOfertas();
             for (Oferta oferta : ofertas) {
-                oferta.getTecnologias().remove(tecnologia);
+                oferta.removeTecnologia(tecnologia, false);
                 ofertaRepository.save(oferta);
             }
         }
@@ -141,9 +135,9 @@ public class TecnologiaController {
         List<Tecnologia> tecnologias = tecnologiaRepository.findAll();
 
         for (Tecnologia tecnologia : tecnologias) {
-            List<Oferta> ofertas = tecnologia.getOfertas();
+            Set<Oferta> ofertas = tecnologia.getOfertas();
             for (Oferta oferta : ofertas) {
-                oferta.getTecnologias().remove(tecnologia);
+                oferta.removeTecnologia(tecnologia, false);
                 ofertaRepository.save(oferta);
             }
         }

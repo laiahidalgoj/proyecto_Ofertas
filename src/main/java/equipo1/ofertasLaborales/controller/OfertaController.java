@@ -8,11 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class OfertaController {
@@ -22,8 +19,9 @@ public class OfertaController {
     private OfertaRepository ofertaRepository;
     private TecnologiaRepository tecnologiaRepository;
 
-    public OfertaController(OfertaRepository ofertaRepository) {
+    public OfertaController(OfertaRepository ofertaRepository, TecnologiaRepository tecnologiaRepository) {
         this.ofertaRepository = ofertaRepository;
+        this.tecnologiaRepository = tecnologiaRepository;
     }
 
     /**
@@ -39,7 +37,6 @@ public class OfertaController {
      * Request
      * Response
      */
-
     @GetMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> findById(@PathVariable Long id) {
         Optional<Oferta> ofertaOpt = ofertaRepository.findById(id);
@@ -56,8 +53,6 @@ public class OfertaController {
      * @param oferta
      * @return
      */
-
-    @ApiIgnore
     @PostMapping("/api/ofertas")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
         if(oferta.getId() != null) {
@@ -65,10 +60,39 @@ public class OfertaController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<Tecnologia> tecnologias = oferta.getTecnologias();
-        System.out.println(tecnologias);
+        Set<Tecnologia> tecnologias = oferta.getTecnologias();
 
-        Oferta result = ofertaRepository.save(oferta);
+        for (Tecnologia tecnologia : tecnologias) {
+            if(tecnologia.getId() == null) {
+                log.info("Creando tecnología inexistente: " + tecnologia.getNombre());
+                tecnologiaRepository.save(tecnologia);
+            }
+        }
+
+        Oferta ofertaAGuardar = new Oferta(
+                null,
+                oferta.getNombre(),
+                oferta.getEmpresa(),
+                oferta.getDescripcion(),
+                oferta.getNumeroVacantes(),
+                oferta.getLocalidad(),
+                oferta.getSalarioMinimo(),
+                oferta.getSalarioMaximo(),
+                oferta.getModalidad(),
+                oferta.getAnyosExperiencia(),
+                oferta.getTitulacion(),
+                oferta.getCategoria(),
+                oferta.getTipoContrato(),
+                oferta.getFechaPublicacion(),
+                oferta.getEstadoProceso(),
+                oferta.getUrlImagen()
+        );
+
+        for (Tecnologia tecnologia : oferta.getTecnologias()) {
+            ofertaAGuardar.addTecnologia(tecnologia);
+        }
+
+        Oferta result = ofertaRepository.save(ofertaAGuardar);
         return ResponseEntity.ok(result);
     }
 
@@ -78,8 +102,6 @@ public class OfertaController {
      * @param oferta
      * @return
      */
-    //TODO
-    @ApiIgnore
     @PutMapping("/api/ofertas")
     public ResponseEntity<Oferta> update(@RequestBody Oferta oferta) {
         if (oferta.getId() == null) {
@@ -91,7 +113,46 @@ public class OfertaController {
             return ResponseEntity.notFound().build();
         }
 
-        Oferta result = ofertaRepository.save(oferta);
+        Set<Tecnologia> tecnologias = oferta.getTecnologias();
+
+        for (Tecnologia tecnologia : tecnologias) {
+            if(tecnologia.getId() == null) {
+                log.info("Creando tecnología inexistente: " + tecnologia.getNombre());
+                tecnologiaRepository.save(tecnologia);
+            }
+        }
+
+        Optional<Oferta> ofertaOpt = ofertaRepository.findById(oferta.getId());
+        if (ofertaOpt.isPresent()) {
+            Oferta ofertaAntigua = ofertaOpt.get();
+            desvincularTecnologias(ofertaAntigua);
+        }
+
+        Oferta ofertaAGuardar = new Oferta(
+                oferta.getId(),
+                oferta.getNombre(),
+                oferta.getEmpresa(),
+                oferta.getDescripcion(),
+                oferta.getNumeroVacantes(),
+                oferta.getLocalidad(),
+                oferta.getSalarioMinimo(),
+                oferta.getSalarioMaximo(),
+                oferta.getModalidad(),
+                oferta.getAnyosExperiencia(),
+                oferta.getTitulacion(),
+                oferta.getCategoria(),
+                oferta.getTipoContrato(),
+                oferta.getFechaPublicacion(),
+                oferta.getEstadoProceso(),
+                oferta.getUrlImagen()
+        );
+
+        for (Tecnologia tecnologia : oferta.getTecnologias()) {
+            ofertaAGuardar.addTecnologia(tecnologia);
+        }
+
+        Oferta result = ofertaRepository.save(ofertaAGuardar);
+        log.info("Actualizando oferta: " + ofertaAGuardar.getId());
         return ResponseEntity.ok(result);
     }
 
@@ -107,19 +168,47 @@ public class OfertaController {
             log.warn("Intentando eliminar una oferta inexistente");
             return ResponseEntity.notFound().build();
         }
+
+        Optional<Oferta> ofertaOpt = ofertaRepository.findById(id);
+        if (ofertaOpt.isPresent()) {
+            Oferta ofertaAntigua = ofertaOpt.get();
+            desvincularTecnologias(ofertaAntigua);
+        }
+
         ofertaRepository.deleteById(id);
+        log.info("Eliminando oferta: " + id);
         return ResponseEntity.noContent().build();
     }
 
     /**
      * Eliminar todas las ofertas de la bbdd.
+     *
      * @return
      */
     @DeleteMapping("/api/ofertas")
     public ResponseEntity<Oferta> deleteAll() {
-        log.info("Petición REST para eliminar todas las ofertas");
-        ofertaRepository.deleteAll();
 
+        List<Oferta> ofertas = ofertaRepository.findAll();
+        for (Oferta oferta : ofertas) {
+            desvincularTecnologias(oferta);
+        }
+
+        List<Tecnologia> tecnologias = tecnologiaRepository.findAll();
+
+        ofertaRepository.deleteAll();
+        log.info("Eliminando todas las ofertas");
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Método que desvincula cada oferta de las tecnologias que están ligadas a ellas.
+     *
+     * @param oferta
+     */
+    private void desvincularTecnologias(Oferta oferta) {
+        Set<Tecnologia> tecnologiasABorrar = new HashSet<>(oferta.getTecnologias());
+        for (Tecnologia tecnologia : tecnologiasABorrar) {
+            oferta.removeTecnologia(tecnologia, true);
+        }
     }
 }

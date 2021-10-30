@@ -3,9 +3,7 @@ package equipo1.ofertasLaborales.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Entidad que gestiona la tabla ofertas de la base de datos
@@ -18,7 +16,7 @@ import java.util.List;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name="OfertaTecnologia",
             joinColumns={
             @JoinColumn(name="IdOferta", referencedColumnName = "id")
@@ -26,9 +24,10 @@ import java.util.List;
             inverseJoinColumns= {
             @JoinColumn(name = "IdTecnologia", referencedColumnName = "id") })
     //@JsonManagedReference
-    private List<Tecnologia> tecnologias = new ArrayList<>();
+    private Set<Tecnologia> tecnologias = new HashSet<>();
 
     // Resto de atributos
+    private String nombre;
     private String empresa;
     private String descripcion;
     private Integer numeroVacantes;
@@ -44,15 +43,27 @@ import java.util.List;
     private Boolean estadoProceso;
     private String urlImagen;
 
+    public void addTecnologia(Tecnologia tecnologia){
+        tecnologias.add(tecnologia);
+        tecnologia.getOfertas().add(this);
+    }
+
+    public void removeTecnologia(Tecnologia tecnologia, boolean tecnologiaExists){
+        tecnologias.remove(tecnologia);
+        if (tecnologiaExists) {
+            tecnologia.getOfertas().remove(this);
+        }
+    }
+
     // Constructores
     public Oferta() {}
 
-    public Oferta(Long id, String empresa, String descripcion, Integer numeroVacantes,
+    public Oferta(Long id, String nombre, String empresa, String descripcion, Integer numeroVacantes,
                   String localidad, Integer salarioMinimo, Integer salarioMaximo, String modalidad,
                   Integer anyosExperiencia, String titulacion, String categoria, String tipoContrato,
                   Date fechaPublicacion, Boolean estadoProceso, String urlImagen) {
         this.id = id;
-//        this.tecnologias = tecnologias;
+        this.nombre = nombre;
         this.empresa = empresa;
         this.descripcion = descripcion;
         this.numeroVacantes = numeroVacantes;
@@ -78,11 +89,19 @@ import java.util.List;
         this.id = id;
     }
 
-    public List<Tecnologia> getTecnologias() {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Set<Tecnologia> getTecnologias() {
         return tecnologias;
     }
 
-    public void setTecnologias(List<Tecnologia> tecnologias) {
+    public void setTecnologias(Set<Tecnologia> tecnologias) {
         this.tecnologias = tecnologias;
     }
 
@@ -202,6 +221,7 @@ import java.util.List;
     public String toString() {
         return "Oferta{" +
                 "id=" + id +
+                ", nombre=" + nombre +
                 ", tecnologias=" + tecnologias +
                 ", empresa='" + empresa + '\'' +
                 ", descripcion='" + descripcion + '\'' +
@@ -218,5 +238,17 @@ import java.util.List;
                 ", estadoProceso=" + estadoProceso +
                 ", urlImagen='" + urlImagen + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Oferta)) return false;
+        return id != null && id.equals(((Oferta) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

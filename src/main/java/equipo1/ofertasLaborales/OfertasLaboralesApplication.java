@@ -39,20 +39,20 @@ public class OfertasLaboralesApplication {
 		Date fecha3 = new Date (21/2/28) ;
 
 
-		Oferta oferta1 = new Oferta(null, "Orange","Comunicaciones",
+		Oferta oferta1 = new Oferta(null,"Desarrollador Backend Jr.", "Orange","Comunicaciones",
 				4,"Barcelona",12000,18000,
 				"Presencial",2,
 				"Ingeniero","Frontend","Indefinido" ,fecha1,true,"") ;
 
-		Oferta oferta2 = new Oferta(null, "Vodafone","Comunicaciones",
+		Oferta oferta2 = new Oferta(null, "Desarrollador Frontend Jr.","Vodafone","Comunicaciones",
 				2,"Madrid",11000,16000,
 				"Remoto",1,
-				"CFGS","Frontend","Practicas" ,fecha2,true,"");
+				"CFGS","Frontend","Practicas" ,fecha2,false,"");
 
-		Oferta oferta3 = new Oferta(null, "Movistar", "Comunicaciones",
+		Oferta oferta3 = new Oferta(null, "Desarrollador Fullstack Sr.","Movistar", "Comunicaciones",
 				2, "Zaragoza", 14000, 19000,
 				"Remoto", 3,
-				"CFGS", "Backend", "Practicas", fecha3, true, "");
+				"CFGS", "Fullstack", "Practicas", fecha3, true, "");
 
 		ofertaRepository.save(oferta1);
 		ofertaRepository.save(oferta2);
@@ -60,11 +60,17 @@ public class OfertasLaboralesApplication {
 
 		List<Tecnologia> tecnologias1 = Arrays.asList(tecJava, tecSpring);
 		List<Tecnologia> tecnologias2 = Arrays.asList(tecJS, tecAngular, tecCSS);
-		List<Tecnologia> tecnologias3 = Arrays.asList(tecPython, tecDjango, tecReact);
+		List<Tecnologia> tecnologias3 = Arrays.asList(tecJS, tecCSS, tecReact, tecPython, tecDjango);
 
-		oferta1.getTecnologias().addAll(tecnologias1);
-		oferta2.getTecnologias().addAll(tecnologias2);
-		oferta3.getTecnologias().addAll(tecnologias3);
+		for (Tecnologia tecnologia : tecnologias1) {
+			oferta1.addTecnologia(tecnologia);
+		}
+		for (Tecnologia tecnologia : tecnologias2) {
+			oferta2.addTecnologia(tecnologia);
+		}
+		for (Tecnologia tecnologia : tecnologias3) {
+			oferta3.addTecnologia(tecnologia);
+		}
 
 		ofertaRepository.saveAll(Arrays.asList(oferta1, oferta2, oferta3));
 
@@ -74,7 +80,7 @@ public class OfertasLaboralesApplication {
 		List<Oferta> ofertas = ofertaRepository.findAll();
 
 		for (Oferta oferta : ofertas) {
-			List<Tecnologia> tecnologias = oferta.getTecnologias();
+			Set<Tecnologia> tecnologias = oferta.getTecnologias();
 			String idTecnologias = "";
 			for(Tecnologia tecnologia : tecnologias) {
 				idTecnologias += tecnologia.getId() + " ";
