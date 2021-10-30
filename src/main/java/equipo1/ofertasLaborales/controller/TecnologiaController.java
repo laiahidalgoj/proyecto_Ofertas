@@ -27,7 +27,7 @@ public class TecnologiaController {
     /**
      * Buscar todas las tecnologias en BBDD
      */
-
+    @CrossOrigin
     @GetMapping("/api/tecnologias")
     public List<Tecnologia> findAll() {
         return tecnologiaRepository.findAll();
@@ -38,6 +38,7 @@ public class TecnologiaController {
      * Request
      * Response
      */
+    @CrossOrigin
     @GetMapping("/api/tecnologias/{id}")
     public ResponseEntity<Tecnologia> findById(@PathVariable Long id) {
         Optional<Tecnologia> tecnologiaOpt = tecnologiaRepository.findById(id);
@@ -54,6 +55,7 @@ public class TecnologiaController {
      * @param tecnologia
      * @return
      */
+    @CrossOrigin
     @PostMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> create(@RequestBody Tecnologia tecnologia) {
         if (tecnologia.getId() != null) {
@@ -79,6 +81,7 @@ public class TecnologiaController {
      * @param tecnologia
      * @return
      */
+    @CrossOrigin
     @PutMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> update(@RequestBody Tecnologia tecnologia) {
         if (tecnologia.getId() == null) {
@@ -100,6 +103,7 @@ public class TecnologiaController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @DeleteMapping("/api/tecnologias/{id}")
     public ResponseEntity<Tecnologia> delete(@PathVariable Long id) {
 
@@ -129,6 +133,7 @@ public class TecnologiaController {
      * Eliminar todas las tecnologias de la bbdd.
      * @return
      */
+    @CrossOrigin
     @DeleteMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> deleteAll() {
         log.info("Petición REST para eliminar todas las tecnologias");

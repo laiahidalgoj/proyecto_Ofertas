@@ -27,6 +27,7 @@ public class OfertaController {
     /**
      * Buscar todas las ofertas en BBDD
      */
+    @CrossOrigin
     @GetMapping("/api/ofertas")
     public List<Oferta> findAll() {
         return ofertaRepository.findAll();
@@ -37,6 +38,7 @@ public class OfertaController {
      * Request
      * Response
      */
+    @CrossOrigin
     @GetMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> findById(@PathVariable Long id) {
         Optional<Oferta> ofertaOpt = ofertaRepository.findById(id);
@@ -53,6 +55,7 @@ public class OfertaController {
      * @param oferta
      * @return
      */
+    @CrossOrigin
     @PostMapping("/api/ofertas")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
         if(oferta.getId() != null) {
@@ -102,6 +105,7 @@ public class OfertaController {
      * @param oferta
      * @return
      */
+    @CrossOrigin
     @PutMapping("/api/ofertas")
     public ResponseEntity<Oferta> update(@RequestBody Oferta oferta) {
         if (oferta.getId() == null) {
@@ -161,6 +165,7 @@ public class OfertaController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @DeleteMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> delete(@PathVariable Long id) {
 
@@ -185,6 +190,7 @@ public class OfertaController {
      *
      * @return
      */
+    @CrossOrigin
     @DeleteMapping("/api/ofertas")
     public ResponseEntity<Oferta> deleteAll() {
 
