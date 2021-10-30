@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class OfertaController {
@@ -65,7 +65,7 @@ public class OfertaController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<Tecnologia> tecnologias = oferta.getTecnologias();
+        Set<Tecnologia> tecnologias = oferta.getTecnologias();
         System.out.println(tecnologias);
 
         Oferta result = ofertaRepository.save(oferta);
