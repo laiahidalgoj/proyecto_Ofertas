@@ -7,6 +7,7 @@ import equipo1.ofertasLaborales.repositories.TecnologiaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,6 +29,7 @@ public class OfertaController {
      * Buscar todas las ofertas en BBDD
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/api/ofertas")
     public List<Oferta> findAll() {
         return ofertaRepository.findAll();
@@ -56,6 +58,7 @@ public class OfertaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/api/ofertas")
     public ResponseEntity<Oferta> create(@RequestBody Oferta oferta) {
         if(oferta.getId() != null) {
@@ -106,6 +109,7 @@ public class OfertaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/api/ofertas")
     public ResponseEntity<Oferta> update(@RequestBody Oferta oferta) {
         if (oferta.getId() == null) {
@@ -166,6 +170,7 @@ public class OfertaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/api/ofertas/{id}")
     public ResponseEntity<Oferta> delete(@PathVariable Long id) {
 
@@ -191,6 +196,7 @@ public class OfertaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/api/ofertas")
     public ResponseEntity<Oferta> deleteAll() {
 

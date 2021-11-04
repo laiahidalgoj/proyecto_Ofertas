@@ -2,12 +2,19 @@ package equipo1.ofertasLaborales;
 
 
 import equipo1.ofertasLaborales.entities.Oferta;
+import equipo1.ofertasLaborales.entities.Role;
 import equipo1.ofertasLaborales.entities.Tecnologia;
+import equipo1.ofertasLaborales.entities.User;
 import equipo1.ofertasLaborales.repositories.OfertaRepository;
+import equipo1.ofertasLaborales.repositories.RoleRepository;
 import equipo1.ofertasLaborales.repositories.TecnologiaRepository;
+import equipo1.ofertasLaborales.repositories.UserRepository;
+import equipo1.ofertasLaborales.service.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
 
@@ -19,6 +26,8 @@ public class OfertasLaboralesApplication {
 				args);
 		OfertaRepository ofertaRepository = context.getBean(OfertaRepository.class);
 		TecnologiaRepository tecnologiaRepository = context.getBean(TecnologiaRepository.class);
+		UserRepository userRepository = context.getBean(UserRepository.class);
+		RoleRepository roleRepository = context.getBean(RoleRepository.class);
 
 		Tecnologia tecJava = new Tecnologia(null, "Java");
 		Tecnologia tecSpring = new Tecnologia(null, "Spring");
@@ -87,6 +96,24 @@ public class OfertasLaboralesApplication {
 			}
 			System.out.println(" Id Oferta: " + oferta.getId() + " - Id Tecnologia: " + idTecnologias);
 		}
+
+		//Inicializar usuarios y roles
+
+		BCryptPasswordEncoder bcryptEncoder = null;
+		Role role1 = new Role(1,"ADMIN", "Rol Admin");
+		Role role2 = new Role(2,"USER", "Rol User");
+		roleRepository.save(role1);
+		roleRepository.save(role2);
+		User user = new User(1,"admin","$2a$10$DTAejq8zVwf.dMadV1SAvuNXAbXjroY.G7dWpS1tzoGolwn7nexTm","","","","");
+		Set<Role> useradmin =new HashSet<>();
+		useradmin.add(role1);
+		useradmin.add(role2);
+		user.setRoles(useradmin);
+		UserServiceImpl encriptarUser = new UserServiceImpl();
+		userRepository.save(user);
+
+
+
 
 	}
 }
