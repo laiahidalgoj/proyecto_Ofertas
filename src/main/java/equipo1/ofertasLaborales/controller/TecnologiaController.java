@@ -7,6 +7,7 @@ import equipo1.ofertasLaborales.repositories.TecnologiaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -28,6 +29,7 @@ public class TecnologiaController {
      * Buscar todas las tecnologias en BBDD
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/api/tecnologias")
     public List<Tecnologia> findAll() {
         return tecnologiaRepository.findAll();
@@ -39,6 +41,7 @@ public class TecnologiaController {
      * Response
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/api/tecnologias/{id}")
     public ResponseEntity<Tecnologia> findById(@PathVariable Long id) {
         Optional<Tecnologia> tecnologiaOpt = tecnologiaRepository.findById(id);
@@ -56,6 +59,7 @@ public class TecnologiaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> create(@RequestBody Tecnologia tecnologia) {
         if (tecnologia.getId() != null) {
@@ -82,6 +86,7 @@ public class TecnologiaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> update(@RequestBody Tecnologia tecnologia) {
         if (tecnologia.getId() == null) {
@@ -104,6 +109,7 @@ public class TecnologiaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/api/tecnologias/{id}")
     public ResponseEntity<Tecnologia> delete(@PathVariable Long id) {
 
@@ -134,6 +140,7 @@ public class TecnologiaController {
      * @return
      */
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/api/tecnologias")
     public ResponseEntity<Tecnologia> deleteAll() {
         log.info("Petición REST para eliminar todas las tecnologias");
