@@ -68,20 +68,17 @@ public class OfertaController {
 
         Set<Tecnologia> tecnologias = oferta.getTecnologias();
         List<Tecnologia> tecnologiasExistentes = tecnologiaRepository.findAll();
-        List<String> nombresTecnologiasExistentes = new ArrayList<>();
+        List<String> nombresTecnologiasExistentes = new ArrayList<String>();
 
         for (Tecnologia tecnologiasExistente : tecnologiasExistentes) {
-            nombresTecnologiasExistentes.add(tecnologiasExistente.getNombre().toLowerCase());
+            nombresTecnologiasExistentes.add(tecnologiasExistente.getNombre());
         }
 
         for (Tecnologia tecnologia : tecnologias) {
-            if (tecnologia.getId() != null || nombresTecnologiasExistentes.contains(tecnologia.getNombre().toLowerCase())) {
-                continue;
+            if(tecnologia.getId() == null && !nombresTecnologiasExistentes.contains(tecnologia.getNombre())) {
+                log.info("Creando tecnología inexistente: " + tecnologia.getNombre());
+                tecnologiaRepository.save(tecnologia);
             }
-
-            log.info("Creando tecnología inexistente: " + tecnologia.getNombre());
-            tecnologiaRepository.save(tecnologia);
-
         }
 
         Oferta ofertaAGuardar = new Oferta(
