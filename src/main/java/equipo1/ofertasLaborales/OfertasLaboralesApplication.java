@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @SpringBootApplication
@@ -37,15 +38,22 @@ public class OfertasLaboralesApplication {
 		Tecnologia tecPython = new Tecnologia(null, "Python");
 		Tecnologia tecReact = new Tecnologia(null, "React");
 		Tecnologia tecDjango = new Tecnologia(null, "Django");
+		Tecnologia tecAndroid = new Tecnologia(null, "Android");
+		Tecnologia tecKotlin = new Tecnologia(null, "Kotlin");
+		Tecnologia tecIOS = new Tecnologia(null, "IOS");
+		Tecnologia tecSwift = new Tecnologia(null, "Swift");
 
 		System.out.println("Número de ofertas en base de datos: " + ofertaRepository.findAll().size());
 		System.out.println("Número de tecnologías en base de datos: " + tecnologiaRepository.findAll().size());
 
 		tecnologiaRepository.saveAll(Arrays.asList(tecJava, tecSpring, tecJS, tecAngular, tecCSS, tecPython, tecReact, tecDjango));
 
-		Date fecha1 = new Date (20/12/23) ;
-		Date fecha2 = new Date (21/10/7) ;
-		Date fecha3 = new Date (21/2/28) ;
+		LocalDate fecha1 = LocalDate.of(2020, Calendar.DECEMBER, 23);
+		LocalDate fecha2 = LocalDate.of(2021, Calendar.FEBRUARY, 7);
+		LocalDate fecha3 = LocalDate.of(2021, Calendar.MARCH, 28);
+		LocalDate fecha4 = LocalDate.of(2020, Calendar.JULY, 1);
+		LocalDate fecha5 = LocalDate.of(2021, Calendar.OCTOBER, 19);
+		LocalDate fecha6 = LocalDate.of(2021, Calendar.AUGUST, 22);
 
 
 		Oferta oferta1 = new Oferta(null,"Desarrollador Backend Jr.", "Orange","Comunicaciones",
@@ -53,23 +61,40 @@ public class OfertasLaboralesApplication {
 				"Presencial",2,
 				"Ingeniero","Frontend","Indefinido" ,fecha1,true,"") ;
 
-		Oferta oferta2 = new Oferta(null, "Desarrollador Frontend Jr.","Vodafone","Comunicaciones",
+		Oferta oferta2 = new Oferta(null, "Desarrollador Frontend Jr.","Indra","Consultoría",
 				2,"Madrid",11000,16000,
 				"Remoto",1,
 				"CFGS","Frontend","Practicas" ,fecha2,false,"");
 
-		Oferta oferta3 = new Oferta(null, "Desarrollador Fullstack Sr.","Movistar", "Comunicaciones",
-				2, "Zaragoza", 14000, 19000,
-				"Remoto", 3,
-				"CFGS", "Fullstack", "Practicas", fecha3, true, "");
+		Oferta oferta3 = new Oferta(null, "Desarrollador Fullstack Sr.","Facebook", "Tecnología",
+				2, "Zaragoza", 50000, 100000,
+				"Remoto", 5,
+				"Ingeniero", "Fullstack", "Practicas", fecha3, true, "");
 
-		ofertaRepository.save(oferta1);
-		ofertaRepository.save(oferta2);
-		ofertaRepository.save(oferta3);
+		Oferta oferta4 = new Oferta(null,"Desarrollador Mobile Android Jr.", "Everis","Consultoría",
+				4,"Barcelona",12000,18000,
+				"Presencial",2,
+				"Ingeniero","Frontend","Indefinido" ,fecha1,true,"") ;
+
+		Oferta oferta5 = new Oferta(null, "Desarrollador Frontend Sr.","Capgemini","Consultoría",
+				2,"Madrid",25000,35000,
+				"Remoto",4,
+				"CFGS","Frontend","Practicas" ,fecha2,false,"");
+
+		Oferta oferta6 = new Oferta(null, "Desarrollador Mobile IOS Sr.","Google", "Tecnología",
+				2, "Bay Area, SF.", 50000, 100000,
+				"Remoto", 8,
+				"Ingeniero", "Mobile", "Indefinido", fecha3, true, "");
+
+		ofertaRepository.saveAll(Arrays.asList(oferta1, oferta2, oferta3, oferta4, oferta5, oferta6));
+
 
 		List<Tecnologia> tecnologias1 = Arrays.asList(tecJava, tecSpring);
 		List<Tecnologia> tecnologias2 = Arrays.asList(tecJS, tecAngular, tecCSS);
 		List<Tecnologia> tecnologias3 = Arrays.asList(tecJS, tecCSS, tecReact, tecPython, tecDjango);
+		List<Tecnologia> tecnologias4 = Arrays.asList(tecAndroid, tecKotlin);
+		List<Tecnologia> tecnologias5 = Arrays.asList(tecJS, tecAngular, tecReact, tecCSS);
+		List<Tecnologia> tecnologias6 = Arrays.asList(tecIOS, tecSwift);
 
 		for (Tecnologia tecnologia : tecnologias1) {
 			oferta1.addTecnologia(tecnologia);
@@ -80,8 +105,17 @@ public class OfertasLaboralesApplication {
 		for (Tecnologia tecnologia : tecnologias3) {
 			oferta3.addTecnologia(tecnologia);
 		}
+		for (Tecnologia tecnologia : tecnologias4) {
+			oferta4.addTecnologia(tecnologia);
+		}
+		for (Tecnologia tecnologia : tecnologias5) {
+			oferta5.addTecnologia(tecnologia);
+		}
+		for (Tecnologia tecnologia : tecnologias6) {
+			oferta6.addTecnologia(tecnologia);
+		}
 
-		ofertaRepository.saveAll(Arrays.asList(oferta1, oferta2, oferta3));
+		ofertaRepository.saveAll(Arrays.asList(oferta1, oferta2, oferta3, oferta4, oferta5, oferta6));
 
 		System.out.println("Número de ofertas en base de datos: " + ofertaRepository.findAll().size());
 		System.out.println("Número de tecnologías en base de datos: " + tecnologiaRepository.findAll().size());
@@ -90,9 +124,9 @@ public class OfertasLaboralesApplication {
 
 		for (Oferta oferta : ofertas) {
 			Set<Tecnologia> tecnologias = oferta.getTecnologias();
-			String idTecnologias = "";
+			StringBuilder idTecnologias = new StringBuilder();
 			for(Tecnologia tecnologia : tecnologias) {
-				idTecnologias += tecnologia.getId() + " ";
+				idTecnologias.append(tecnologia.getId()).append(" ");
 			}
 			System.out.println(" Id Oferta: " + oferta.getId() + " - Id Tecnologia: " + idTecnologias);
 		}

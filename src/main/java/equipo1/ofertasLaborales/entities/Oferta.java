@@ -1,8 +1,7 @@
 package equipo1.ofertasLaborales.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -39,7 +38,7 @@ import java.util.*;
     private String titulacion;
     private String categoria;
     private String tipoContrato;
-    private Date fechaPublicacion;
+    private LocalDate fechaPublicacion;
     private Boolean estadoProceso;
     private String urlImagen;
 
@@ -61,7 +60,7 @@ import java.util.*;
     public Oferta(Long id, String nombre, String empresa, String descripcion, Integer numeroVacantes,
                   String localidad, Integer salarioMinimo, Integer salarioMaximo, String modalidad,
                   Integer anyosExperiencia, String titulacion, String categoria, String tipoContrato,
-                  Date fechaPublicacion, Boolean estadoProceso, String urlImagen) {
+                  LocalDate fechaPublicacion, Boolean estadoProceso, String urlImagen) {
         this.id = id;
         this.nombre = nombre;
         this.empresa = empresa;
@@ -201,11 +200,11 @@ import java.util.*;
         this.tipoContrato = tipoContrato;
     }
 
-    public Date getFechaPublicacion() {
+    public LocalDate getFechaPublicacion() {
         return fechaPublicacion;
     }
 
-    public void setFechaPublicacion(Date fechaPublicacion) {
+    public void setFechaPublicacion(LocalDate fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
 
